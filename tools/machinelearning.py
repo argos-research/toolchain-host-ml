@@ -9,9 +9,6 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from sklearn import svm
 from matplotlib.cbook import Null
 
-from joblib import Parallel, delayed
-#import joblib
-from Crypto.SelfTest.Random.test__UserFriendlyRNG import multiprocessing
 
 if False: plt=None
 
