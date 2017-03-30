@@ -2,6 +2,7 @@ import os
 import sqlite3
 import time
 
+
 class db:
     attr = []
     attr_type = []
@@ -9,34 +10,34 @@ class db:
     table_name = "training_set"
     
     def __init__(self, filename, attr, attr_type):
-        self.attr=attr
+        self.attr = attr
         self.attr_type = attr_type
-        self.filename=filename
+        self.filename = filename
         
-        if(len(self.attr)!=len(self.attr_type)):
+        if(len(self.attr) != len(self.attr_type)):
             raise Exception("Attribute length is not equal to attribute type length!")
         
-        tmp_str = """Initialize database """+self.filename+""" with attributes 
-    """+str(self.attr)+""" and types
-    """+str(self.attr_type)
+        tmp_str = """Initialize database """ + self.filename + """ with attributes 
+    """ + str(self.attr) + """ and types
+    """ + str(self.attr_type)
                 
         self.output(tmp_str)
                 
     def output(self, msg):
         for line in msg.splitlines():
-            print "DB: "+line
+            print "DB: " + line
         
     def check_file(self):
-        if(self.filename==""):
+        if(self.filename == ""):
             raise Exception("Filename is empty!")
             
         if(not(self.filename.endswith(".db"))):
             raise Exception("Not a database file format!")
         
         
-    def sql_exec(self, c, command ,debug):
+    def sql_exec(self, c, command , debug):
         if(debug):
-            self.output( """SQL-DEBUG: Executing statement: \nSQL-DEBUG: """+command)
+            self.output("""SQL-DEBUG: Executing statement: \nSQL-DEBUG: """ + command)
                         
         c.execute(command)
         
@@ -48,51 +49,51 @@ class db:
     def write(self, tmp_tuple):
         self.check_file()
                 
-        #Delete previous db
+        # Delete previous db
         if(os.path.isfile(self.filename)):
             self.output("Database already exists. Deleting...")
             os.remove(self.filename)
             
         
-        self.output("Write to database "+self.filename)
+        self.output("Write to database " + self.filename)
         
-        #establish db connection
+        # establish db connection
         conn = sqlite3.connect(self.filename)
-        c= conn.cursor()
+        c = conn.cursor()
         
-        #rdy for commands
-        command = """CREATE TABLE """+self.table_name+"""
+        # rdy for commands
+        command = """CREATE TABLE """ + self.table_name + """
                      ("""
-        for i in range(len(self.attr)-1):
-            command+= self.attr[i]+" "+self.attr_type[i]+","
+        for i in range(len(self.attr) - 1):
+            command += self.attr[i] + " " + self.attr_type[i] + ","
             
-        command+= self.attr[len(self.attr)-1]+" "+self.attr_type[len(self.attr)-1]+")"
+        command += self.attr[len(self.attr) - 1] + " " + self.attr_type[len(self.attr) - 1] + ")"
             
         
-        self.sql_exec(c,command,False) 
+        self.sql_exec(c, command, False) 
         
         
         self.output("Fill in data")
         
         start = time.time()
         
-        command = "INSERT INTO "+self.table_name+"('"
-        for i in range(len(self.attr)-1):
-            command += self.attr[i]+"', '"
+        command = "INSERT INTO " + self.table_name + "('"
+        for i in range(len(self.attr) - 1):
+            command += self.attr[i] + "', '"
         
-        command +=self.attr[len(self.attr)-1]+"')VALUES ("
-        for i in range(len(self.attr)-1):
+        command += self.attr[len(self.attr) - 1] + "')VALUES ("
+        for i in range(len(self.attr) - 1):
             command += "?, "
             
         command += "?)"
         
         
-        c.executemany(command,tmp_tuple)
+        c.executemany(command, tmp_tuple)
 
         end = time.time()
         conn.commit()
         
-        self.output( "Done! Time needed: "+str(end-start))
+        self.output("Done! Time needed: " + str(end - start))
         
         self.output("Close connection to database")
         conn.commit()
@@ -105,13 +106,13 @@ class db:
         self.check_file()
         if(not(os.path.isfile(self.filename))):
             raise Exception("Cannot reach file!")
-        self.output("Reading file "+self.filename)
+        self.output("Reading file " + self.filename)
         
-        #establish db connection
+        # establish db connection
         conn = sqlite3.connect(self.filename)
-        c= conn.cursor()
+        c = conn.cursor()
         
-        command = "SELECT * FROM "+self.table_name
+        command = "SELECT * FROM " + self.table_name
         
         self.sql_exec(c, command, False)
             
@@ -122,7 +123,7 @@ class db:
 
         conn.commit()
         conn.close()
-        self.output("Reading done! Time needed: "+str(end-start))
+        self.output("Reading done! Time needed: " + str(end - start))
         
         return data
         
@@ -130,18 +131,18 @@ class db:
         self.check_file()
         if(not(os.path.isfile(self.filename))):
             raise Exception("Cannot reach file!")
-        self.output("Reading file "+self.filename)
+        self.output("Reading file " + self.filename)
         
-        #establish db connection
+        # establish db connection
         conn = sqlite3.connect(self.filename)
-        c= conn.cursor()
+        c = conn.cursor()
         
         command = "SELECT "
         
-        for i in range(len(self.attr)-2):
-            command += self.attr[i]+", "
+        for i in range(len(self.attr) - 2):
+            command += self.attr[i] + ", "
         
-        command += self.attr[len(self.attr)-2]+" FROM "+self.table_name
+        command += self.attr[len(self.attr) - 2] + " FROM " + self.table_name
         
         self.sql_exec(c, command, True)
             
@@ -152,7 +153,7 @@ class db:
 
         conn.commit()
         conn.close()
-        self.output("Reading done! Time needed: "+str(end-start))
+        self.output("Reading done! Time needed: " + str(end - start))
         
         return data
     
@@ -161,13 +162,13 @@ class db:
         self.check_file()
         if(not(os.path.isfile(self.filename))):
             raise Exception("Cannot reach file!")
-        self.output("Reading file "+self.filename)
+        self.output("Reading file " + self.filename)
         
-        #establish db connection
+        # establish db connection
         conn = sqlite3.connect(self.filename)
-        c= conn.cursor()
+        c = conn.cursor()
         
-        command = "SELECT "+self.attr[-1]+" FROM "+self.table_name
+        command = "SELECT " + self.attr[-1] + " FROM " + self.table_name
         
         self.sql_exec(c, command, False)
             
@@ -178,7 +179,7 @@ class db:
 
         conn.commit()
         conn.close()
-        self.output("Reading done! Time needed: "+str(end-start))
+        self.output("Reading done! Time needed: " + str(end - start))
         
         return data
     

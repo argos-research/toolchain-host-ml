@@ -1,9 +1,10 @@
 print(__doc__)
 
-import numpy as np
-import matplotlib.pyplot as plt
-
 from sklearn import svm, datasets
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 if False: np = None
 if False: plt = None
@@ -13,7 +14,7 @@ if False: plt = None
 iris = datasets.load_iris()
 X = iris.data[:, :2]  
 # we only take the first two features.
-#We could avoid this ugly slicing by using a two-dim dataset
+# We could avoid this ugly slicing by using a two-dim dataset
 y = iris.target
 
 h = .02  # step size in the mesh
