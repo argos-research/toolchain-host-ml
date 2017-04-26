@@ -9,7 +9,13 @@ from tools.machine_learning.SVC_poly import SVC_poly
 from tools.machine_learning.SVC_rbf import SVC_rbf
 from tools.machine_learning.SVC_sigmoid import SVC_sigmoid
 from tools.machine_learning.data_holder import data_holder
-
+from tools.machine_learning.Bayes_Ridge_Reg import Bayes_Ridge_Reg
+from tools.machine_learning.Logistic_Reg import Logistic_Reg
+from tools.machine_learning.ARD_Reg import ARD_Reg
+from tools.machine_learning.Perceptron import Perceptron
+from tools.machine_learning.Pas_agg_class import Pas_agg_class
+from tools.machine_learning.KNeighborsClassifier import KNeighborsClassifier
+from tools.machine_learning.Pipe_LinearSVC_KBest import Pipe_LinearSVC_KBest
 
 # from tools import machinelearning as ml
 def output(msg):
@@ -69,14 +75,14 @@ num_tests = 1
 # fill tuple data
 for i in range(int(num_sets1 * 0.5 * num_tests)):
     for j in range(int(num_sets1 * 0.5 * num_tests)):
-        period1 = 200 + i * 20 / num_tests + int(random.random() * 10)
-        period2 = 240 + j * 20 / num_tests + int(random.random() * 10) 
+        period1 = 200 + i * 20 / num_tests + int(random.random() * 50)
+        period2 = 240 + j * 20 / num_tests + int(random.random() * 50) 
         
         tmp_tuple.append((period1, period2, period1 * i * period1 + period2 * period2 * j < 2500000.0 * num_tests + random.random() * 500000))
         # tmp_tuple.append((period1, period2, period1 + period2  <  750.0 * num_tests + random.random() * 10))
 
 end = time.time()
-output("Test data generated! Time needed: " + str(end - start))
+output("Test data generated! Total number: "+str(num_sets1*num_sets1)+" Time needed: " + str(end - start))
     
 
 
@@ -113,14 +119,24 @@ data_holder = data_holder(data_per_set, num_trainingsets, input_data, output_dat
 
 # create machine learning algorithmns
 svc_linear = SVC_linear()
-# svc_poly = SVC_poly()#
+svc_poly = SVC_poly()
 svc_rbf = SVC_rbf()
-svc_dummy = SVC_dummy()
+#svc_dummy = SVC_dummy()
 svc_sigmoid = SVC_sigmoid()
 sgd = SGD()
+bay_reg = Bayes_Ridge_Reg()
+log_reg = Logistic_Reg()
+#ard_reg = ARD_Reg()
+percep = Perceptron()
+pas_agg_class = Pas_agg_class()
+k_neigh = KNeighborsClassifier()
+
+
+#pipe = Pipe_LinearSVC_KBest()
+
 
 
 # Create list
-data_holder.plot([svc_linear, svc_rbf, svc_sigmoid, sgd, svc_dummy], 3, 5)
+data_holder.plot([svc_linear, svc_poly, svc_rbf,svc_sigmoid,sgd, bay_reg, log_reg, percep, pas_agg_class, k_neigh], 3, 1)
 
 

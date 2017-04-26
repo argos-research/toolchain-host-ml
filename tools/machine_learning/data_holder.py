@@ -74,12 +74,14 @@ class data_holder:
         except: 
             self.output("Can not partially fit data to this ml algorithm")
         
-    def plot(self, algo_list, plot_columns = 4, h=5):
+    def plot(self, algo_list, plot_columns = 4, h=1):
         if not(isinstance(self, data_holder)):
             self.output("Plot can only be executed from data_holder!")
             return
         
         algo_list_length = len(algo_list)
+        if algo_list_length < plot_columns:
+            plot_columns=algo_list_length
         if algo_list_length<1:
             self.output("List is empty!")
             return
@@ -90,7 +92,7 @@ class data_holder:
         #Initialize figure stuff 
         #
         plot_rows = ((algo_list_length-1)/plot_columns)+1   
-        plt.figure(figsize=(10,5))
+        plt.figure(figsize=(plot_columns*3.5, plot_rows*3.5))
         
         #
         # Prepare the data 
@@ -112,34 +114,35 @@ class data_holder:
             plt.subplot(plot_rows, plot_columns, i + 1)
             plt.subplots_adjust(wspace=0.3, hspace=0.3)
             
-                
-            algo = algo_list[i].get_ml_algo()
-                
-            #mache zeugs
-            if not(algo==Null):
-                Z_ = algo.predict(np.c_[xx.ravel(), yy.ravel()])
-                
-                # Put the result into a color plot
-                Z = Z_.reshape(xx.shape)
-                plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm_r, alpha=0.8)
-                plt.xlim(xx.min(), xx.max())
-                plt.ylim(yy.min(), yy.max())
-          
-                # Plot also the training points
-                plt.scatter(data_holder.input_2dvector[:, 0], data_holder.input_2dvector[:, 1], c=data_holder.output_1dvector, cmap=plt.cm.coolwarm_r, alpha=0.5)  
+            if not(algo_list[i]==None):
+                algo = algo_list[i].get_ml_algo()
+                    
+                #mache zeugs
+                if not(algo==Null):
+                    Z_ = algo.predict(np.c_[xx.ravel(), yy.ravel()])
+                    
+                    # Put the result into a color plot
+                    Z = Z_.reshape(xx.shape)
+                    plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm_r, alpha=0.8)
+                    plt.xlim(xx.min(), xx.max())
+                    plt.ylim(yy.min(), yy.max())
               
-    
-                plt.xlabel("Period Task 1")
-                plt.ylabel("Period Task 2")
+                    # Plot also the training points
+                    plt.scatter(data_holder.input_2dvector[:, 0], data_holder.input_2dvector[:, 1], c=data_holder.output_1dvector, cmap=plt.cm.coolwarm_r, alpha=0.5)  
+                  
+        
+                    plt.xlabel("Period Task 1")
+                    plt.ylabel("Period Task 2")
+                else:
+                    plt.xlabel("ML not initialized!") 
             else:
                 plt.xlabel("ML not initialized!")   
-            
-                
+
             plt.xticks(())
             plt.yticks(())
-            plt.title(algo_list[i])
-        
-
+            plt.title(algo_list[i])    
+            
+    
         plt.show()
         self.output("Plotting done!")
         
