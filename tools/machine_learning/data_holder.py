@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib.cbook import Null
 from sklearn.externals import joblib
 
-from pip._vendor.pyparsing import line
-
 
 if False: plt=None
 
